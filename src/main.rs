@@ -1,13 +1,14 @@
-use std::{env};
+use std::{env, process};
+use mgrep::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() != 3 {
-        panic!("the arguments error, please input query and file path.")
-    }
+    let config = Config::build(&args)
+        .expect("Should have been able to read the file");
 
-    for a in &args {
-        println!("the arg = {:?}", a);
+    if let Err(e) = mgrep::run(config){
+        println!("Application error: {e}");
+        process::exit(1);
     }
 }
